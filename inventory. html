@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DeliverOS - Inventory</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #0d1117;
+      color: #e6edf3;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .topbar h1 { font-size: 20px; }
+
+    .btn-add {
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .summary-card {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .summary-card p.num {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .summary-card p.label {
+      font-size: 11px;
+      color: #8b949e;
+      margin-top: 4px;
+    }
+
+    .green { color: #3fb950; }
+    .orange { color: #d29922; }
+    .red { color: #f85149; }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .item-card {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .item-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .badge {
+      font-size: 10px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge.good {
+      background: #1a3a2a;
+      color: #3fb950;
+    }
+
+    .badge.low {
+      background: #3a2a0a;
+      color: #d29922;
+    }
+
+    .badge.critical {
+      background: #3a1a1a;
+      color: #f85149;
+    }
+
+    .progress-bar {
+      background: #0d1117;
+      border-radius: 6px;
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 6px;
+    }
+
+    .fill-good { background: #3fb950; }
+    .fill-low { background: #d29922; }
+    .fill-critical { background: #f85149; }
+
+    .item-bottom {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #8b949e;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <h1>🏭 Inventory</h1>
+    <button class="btn-add">+ Add Item</button>
+  </div>
+
+  <div class="summary-row">
+    <div class="summary-card">
+      <p class="num green">3</p>
+      <p class="label">Good Stock</p>
+    </div>
+    <div class="summary-card">
+      <p class="num orange">2</p>
+      <p class="label">Low Stock</p>
+    </div>
+    <div class="summary-card">
+      <p class="num red">1</p>
+      <p class="label">Critical</p>
+    </div>
+  </div>
+
+  <p class="section-title">All Items</p>
+
+  <div class="item-card">
+    <div class="item-top">
+      <p class="item-name">Delivery Boxes (Large)</p>
+      <span class="badge good">Good</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill fill-good" style="width: 64%"></div>
+    </div>
+    <div class="item-bottom">
+      <span>320 / 500 units</span>
+      <span>64% stocked</span>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-top">
+      <p class="item-name">Bubble Wrap Rolls</p>
+      <span class="badge low">Low</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill fill-low" style="width: 22%"></div>
+    </div>
+    <div class="item-bottom">
+      <span>45 / 200 units</span>
+      <span>22% stocked</span>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-top">
+      <p class="item-name">Packing Tape</p>
+      <span class="badge critical">Critical</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill fill-critical" style="width: 12%"></div>
+    </div>
+    <div class="item-bottom">
+      <span>12 / 100 units</span>
+      <span>12% stocked</span>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-top">
+      <p class="item-name">Thermal Bags</p>
+      <span class="badge good">Good</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill fill-good" style="width: 58%"></div>
+    </div>
+    <div class="item-bottom">
+      <span>88 / 150 units</span>
+      <span>58% stocked</span>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-top">
+      <p class="item-name">Fragile Stickers</p>
+      <span class="badge low">Low</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill fill-low" style="width: 10%"></div>
+    </div>
+    <div class="item-bottom">
+      <span>31 / 300 units</span>
+      <span>10% stocked</span>
+    </div>
+  </div>
+
+</body>
+</html>
