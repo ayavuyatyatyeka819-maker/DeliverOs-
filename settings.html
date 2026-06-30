@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DeliverOS - Settings</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #0d1117;
+      color: #e6edf3;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .topbar h1 { font-size: 20px; }
+
+    .profile-card {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .profile-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .profile-info h2 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .profile-info p {
+      font-size: 12px;
+      color: #8b949e;
+      margin-top: 2px;
+    }
+
+    .plan-badge {
+      font-size: 10px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: #1a3a5c;
+      color: #4fc3f7;
+      font-weight: 600;
+      margin-top: 6px;
+      display: inline-block;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      margin-top: 20px;
+    }
+
+    .setting-item {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+
+    .setting-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .setting-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .icon-blue { background: #1a3a5c; }
+    .icon-green { background: #1a3a2a; }
+    .icon-orange { background: #3a2a0a; }
+    .icon-purple { background: #2a1a3a; }
+    .icon-red { background: #3a1a1a; }
+
+    .setting-text h3 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .setting-text p {
+      font-size: 11px;
+      color: #8b949e;
+      margin-top: 2px;
+    }
+
+    .arrow {
+      color: #8b949e;
+      font-size: 16px;
+    }
+
+    .toggle {
+      width: 40px;
+      height: 22px;
+      border-radius: 11px;
+      background: #2563eb;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .toggle-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: white;
+      position: absolute;
+      top: 2px;
+      right: 2px;
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      border: 1px solid #f85149;
+      border-radius: 12px;
+      color: #f85149;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 24px;
+    }
+
+    .version {
+      text-align: center;
+      font-size: 11px;
+      color: #8b949e;
+      margin-top: 16px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <h1>⚙️ Settings</h1>
+  </div>
+
+  <div class="profile-card">
+    <div class="profile-avatar">AD</div>
+    <div class="profile-info">
+      <h2>Admin User</h2>
+      <p>admin@deliveros.com</p>
+      <span class="plan-badge">Professional Plan</span>
+    </div>
+  </div>
+
+  <p class="section-title">Account</p>
+
+  <div class="setting-item">
+    <div class="setting-left">
+      <div class="setting-icon icon-blue">🏢</div>
+      <div class="setting-text">
+        <h3>Company Profile</h3>
+        <p>Name, logo, contact details</p>
+      </div>
+    </div>
+    <span class="arrow">›</span>
+  </div>
+
+  <div class="setting-item">
+    <div class="setting-left">
+      <div class="setting-icon icon-green">💳</div>
+      <div class="setting-text">
+        <h3>Billing & Subscription</h3>
+        <p>Professional · $299/mo</p>
+      </div>
+    </div>
+    <span class="arrow">›</span>
+  </div>
+
+  <div class="setting-item">
+    <div class="setting-left">
+      <div class="setting-icon icon-purple">👥</div>
+      <div class="setting-text">
+        <h3>Team & Permissions</h3>
+        <p>Manage users and roles</p>
+      </div>
+    </div>
+    <span class="arrow">›</span>
+  </div>
+
+  <p class="section-title">Preferences</p>
+
+  <div class="setting-item">
+    <div class="setting-left">
+      <div class="setting-icon icon-orange">🔔</div>
+      <div class="setting-text">
+        <h3>Notifications</h3>
+        <p>Alerts and reminders</p>
+      </div>
+    </div>
+    <div class="toggle">
+      <div class="toggle-dot"></div>
+    </div>
+  </div>
+
+  <div class="setting-item">
+    <div class="setting-left">
+      <div class="setting-icon icon-blue">🌙</div>
+      <div class="setting-text">
+        <h3>Dark Mode</h3>
+        <p>Currently enabled</p>
+      </div>
+    </div>
+    <div class="toggle">
+      <div class="toggle-dot"></div>
+    </div>
+  </div>
+
+  <p class="section-title">More</p>
+
+  <div class="setting-item">
+    <div class="setting-left">
+      <div class="setting-icon icon-green">🔗</div>
+      <div class="setting-text">
+        <h3>Integrations</h3>
+        <p>Shopify, Stripe, Google Maps</p>
+      </div>
+    </div>
+    <span class="arrow">›</span>
+  </div>
+
+  <div class="setting-item">
+    <div class="setting-left">
+      <div class="setting-icon icon-purple">❓</div>
+      <div class="setting-text">
+        <h3>Help & Support</h3>
+        <p>Docs, tutorials, contact us</p>
+      </div>
+    </div>
+    <span class="arrow">›</span>
+  </div>
+
+  <button class="logout-btn">
+    🚪 Log Out
+  </button>
+
+  <p class="version">DeliverOS v1.0.0 · © 2026</p>
+
+</body>
+  </html>
