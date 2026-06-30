@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DeliverOS - Analytics</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #0d1117;
+      color: #e6edf3;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .topbar h1 { font-size: 20px; }
+
+    .period-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .period-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #21262d;
+      background: transparent;
+      color: #8b949e;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .period-btn.active {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-card {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .kpi-card p.num {
+      font-size: 20px;
+      font-weight: 700;
+      color: #58a6ff;
+    }
+
+    .kpi-card p.label {
+      font-size: 10px;
+      color: #8b949e;
+      margin-top: 4px;
+    }
+
+    .kpi-card p.sub {
+      font-size: 10px;
+      color: #3fb950;
+      margin-top: 2px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .chart-card {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .chart-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #8b949e;
+    }
+
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 120px;
+    }
+
+    .bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .bar {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      background: #2563eb;
+      opacity: 0.85;
+    }
+
+    .bar-label {
+      font-size: 10px;
+      color: #8b949e;
+    }
+
+    .bar-value {
+      font-size: 10px;
+      color: #58a6ff;
+    }
+
+    .driver-perf {
+      margin-bottom: 12px;
+    }
+
+    .driver-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .driver-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e3a5f, #2563eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .driver-bar-wrap {
+      flex: 1;
+    }
+
+    .driver-name-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .driver-bar-bg {
+      background: #0d1117;
+      border-radius: 6px;
+      height: 6px;
+      overflow: hidden;
+    }
+
+    .driver-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #2563eb, #0ea5e9);
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <h1>📊 Analytics</h1>
+  </div>
+
+  <div class="period-row">
+    <button class="period-btn active">Week</button>
+    <button class="period-btn">Month</button>
+    <button class="period-btn">Year</button>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <p class="num">354</p>
+      <p class="label">Total Deliveries</p>
+      <p class="sub">↑ 12%</p>
+    </div>
+    <div class="kpi-card">
+      <p class="num">94%</p>
+      <p class="label">On Time Rate</p>
+      <p class="sub">↑ 2.1%</p>
+    </div>
+    <div class="kpi-card">
+      <p class="num">$19k</p>
+      <p class="label">Revenue</p>
+      <p class="sub">↑ 8%</p>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <p class="chart-title">📈 Weekly Deliveries</p>
+    <div class="bar-chart">
+
+      <div class="bar-group">
+        <p class="bar-value">38</p>
+        <div class="bar" style="height: 50px"></div>
+        <p class="bar-label">Mon</p>
+      </div>
+
+      <div class="bar-group">
+        <p class="bar-value">52</p>
+        <div class="bar" style="height: 70px"></div>
+        <p class="bar-label">Tue</p>
+      </div>
+
+      <div class="bar-group">
+        <p class="bar-value">45</p>
+        <div class="bar" style="height: 60px"></div>
+        <p class="bar-label">Wed</p>
+      </div>
+
+      <div class="bar-group">
+        <p class="bar-value">61</p>
+        <div class="bar" style="height: 82px"></div>
+        <p class="bar-label">Thu</p>
+      </div>
+
+      <div class="bar-group">
+        <p class="bar-value">74</p>
+        <div class="bar" style="height: 100px"></div>
+        <p class="bar-label">Fri</p>
+      </div>
+
+      <div class="bar-group">
+        <p class="bar-value">55</p>
+        <div class="bar" style="height: 74px"></div>
+        <p class="bar-label">Sat</p>
+      </div>
+
+      <div class="bar-group">
+        <p class="bar-value">29</p>
+        <div class="bar" style="height: 39px"></div>
+        <p class="bar-label">Sun</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <p class="chart-title">🏆 Driver Performance</p>
+
+    <div class="driver-row">
+      <div class="driver-avatar">PP</div>
+      <div class="driver-bar-wrap">
+        <div class="driver-name-row">
+          <span>Priya Patel</span>
+          <span style="color:#3fb950">14 deliveries</span>
+        </div>
+        <div class="driver-bar-bg">
+          <div class="driver-bar-fill" style="width:94%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="driver-row">
+      <div class="driver-avatar">MJ</div>
+      <div class="driver-bar-wrap">
+        <div class="driver-name-row">
+          <span>Marcus Johnson</span>
+          <span style="color:#3fb950">12 deliveries</span>
+        </div>
+        <div class="driver-bar-bg">
+          <div class="driver-bar-fill" style="width:80%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="driver-row">
+      <div class="driver-avatar">SC</div>
+      <div class="driver-bar-wrap">
+        <div class="driver-name-row">
+          <span>Sarah Chen</span>
+          <span style="color:#3fb950">9 deliveries</span>
+        </div>
+        <div class="driver-bar-bg">
+          <div class="driver-bar-fill" style="width:60%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="driver-row">
+      <div class="driver-avatar">DR</div>
+      <div class="driver-bar-wrap">
+        <div class="driver-name-row">
+          <span>Diego Reyes</span>
+          <span style="color:#d29922">7 deliveries</span>
+        </div>
+        <div class="driver-bar-bg">
+          <div class="driver-bar-fill" style="width:46%"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+  </html>
