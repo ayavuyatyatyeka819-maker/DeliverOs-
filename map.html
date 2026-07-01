@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DeliverOS - Live Map</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: Arial, sans-serif;
+      padding-bottom: 80px;
+    }
+    .topbar {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #161b22;
+      border-bottom: 1px solid #21262d;
+    }
+    .topbar h1 { font-size: 18px; }
+    .live-badge {
+      background: #1a3a2a;
+      color: #3fb950;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    #map {
+      width: 100%;
+      height: calc(100vh - 130px);
+    }
+    .driver-panel {
+      position: fixed;
+      bottom: 70px;
+      left: 0;
+      right: 0;
+      background: #161b22;
+      border-top: 1px solid #21262d;
+      padding: 12px 16px;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+    }
+    .driver-chip {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #3fb950;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #161b22;
+      border-top: 1px solid #21262d;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 999;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: #8b949e;
+      font-size: 10px;
+      padding: 4px 8px;
+    }
+    .nav-item.active { color: #58a6ff; }
+    .nav-item span.icon { font-size: 20px; }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <h1>🗺️ Live Driver Map</h1>
+    <span class="live-badge">🔴 Live</span>
+  </div>
+
+  <div id="map"></div>
+
+  <div class="driver-panel" id="driverPanel">
+    <div class="driver-chip">
+      <div class="dot"></div> Loading drivers...
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <span class="icon">⊞</span><span>Dashboard</span>
+    </a>
+    <a href="orders.html" class="nav-item">
+      <span class="icon">📦</span><span>Orders</span>
+    </a>
+    <a href="map.html" class="nav-item active">
+      <span class="icon">🗺️</span><span>Map</span>
+    </a>
+    <a href="inventory.html" class="nav-item">
+      <span class="icon">🏭</span><span>Inventory</span>
+    </a>
+    <a href="analytics.html" class="nav-item">
+      <span class="icon">📊</span><span>Analytics</span>
+    </a>
+    <a href="settings.html" class="nav-item">
+      <span class="icon">⚙️</span><span>Settings</span>
+    </a>
+  </nav>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      onSnapshot,
+      doc,
+      updateDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA49Ty_swoots2VvdIZFfoMd1Rn-nFQNtI",
+      authDomain: "deliveros-ddb37.firebaseapp.com",
+      projectId: "deliveros-ddb37",
+      storageBucket: "deliveros-ddb37.firebasestorage.app",
+      messagingSenderId: "47557698801",
+      appId: "1:47557698801:web:8963985a5327bba9e8b550"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let map;
+    let markers = {};
+    let drivers = [];
+
+    // Initialize Google Map
+    window.initMap = function() {
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: -26.2041, lng: 28.0473 },
+        zoom: 11,
+        styles: [
+          { elementType: "geometry", stylers: [{ color: "#212121" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
+          { elementType: "labels.text.stroke", stylers: [{ color: "#212121" }] },
+          { featureType: "road", elementType: "geometry", stylers: [{ color: "#2c2c2c" }] },
+          { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#212121" }] },
+          { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#8a8a8a" }] },
+          { featureType: "water", elementType: "geometry", stylers: [{ color: "#000000" }] },
+          { featureType: "poi", stylers: [{ visibility: "off" }] }
+        ]
+      });
+
+      // Listen to drivers from Firebase
+      onSnapshot(collection(db, "drivers"), (snapshot) => {
+        drivers = [];
+        snapshot.forEach(d => {
+          drivers.push({ docId: d.id, ...d.data() });
+        });
+        updateMap();
+        updateDriverPanel();
+      });
+    }
+
+    function updateMap() {
+      // Clear old markers
+      Object.values(markers).forEach(m => m.setMap(null));
+      markers = {};
+
+      drivers.forEach((driver, index) => {
+        // Simulate driver locations around Johannesburg
+        let lat = -26.2041 + (Math.random() - 0.5) * 0.1;
+        let lng = 28.0473 + (Math.random() - 0.5) * 0.1;
+
+        let color = driver.status === "active" ? "#3fb950" :
+                    driver.status === "idle" ? "#d29922" : "#6e7681";
+
+        let marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: driver.name,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 10,
+            fillColor: color,
+            fillOpacity: 1,
+            strokeColor: "#ffffff",
+            strokeWeight: 2,
+          }
+        });
+
+        let infoWindow = new google.maps.InfoWindow({
+          content: `
+            <div style="background:#161b22;color:#e6edf3;padding:10px;border-radius:8px;font-family:Arial">
+              <strong>${driver.name}</strong><br>
+              Status: ${driver.status}<br>
+              Deliveries: ${driver.deliveries || 0}<br>
+              Rating: ⭐ ${driver.rating || "5.0"}
+            </div>
+          `
+        });
+
+        marker.addListener("click", () => {
+          infoWindow.open(map, marker);
+        });
+
+        markers[driver.docId] = marker;
+      });
+    }
+
+    function updateDriverPanel() {
+      let panel = document.getElementById("driverPanel");
+      panel.innerHTML = "";
+
+      if (drivers.length === 0) {
+        panel.innerHTML = `
+          <div class="driver-chip">No drivers yet</div>
+        `;
+        return;
+      }
+
+      drivers.forEach(driver => {
+        let color = driver.status === "active" ? "#3fb950" :
+                    driver.status === "idle" ? "#d29922" : "#6e7681";
+        panel.innerHTML += `
+          <div class="driver-chip">
+            <div class="dot" style="background:${color}"></div>
+            ${driver.name}
+          </div>
+        `;
+      });
+    }
+  </script>
+
+  <!-- Replace YOUR_API_KEY with your real key -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+
+</body>
+</html>
