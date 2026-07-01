@@ -10,6 +10,7 @@
       color: #e6edf3;
       font-family: Arial, sans-serif;
       padding: 20px;
+      padding-bottom: 80px;
     }
 
     .topbar {
@@ -21,86 +22,69 @@
 
     .topbar h1 { font-size: 20px; }
 
-    .period-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .period-btn {
-      padding: 6px 14px;
+    .live-badge {
+      background: #1a3a2a;
+      color: #3fb950;
+      font-size: 11px;
+      padding: 4px 10px;
       border-radius: 20px;
-      border: 1px solid #21262d;
-      background: transparent;
-      color: #8b949e;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .period-btn.active {
-      background: #2563eb;
-      color: white;
-      border-color: #2563eb;
+      font-weight: 600;
     }
 
     .kpi-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
       margin-bottom: 20px;
     }
 
     .kpi-card {
       background: #161b22;
       border: 1px solid #21262d;
-      border-radius: 10px;
-      padding: 14px;
-      text-align: center;
-    }
-
-    .kpi-card p.num {
-      font-size: 20px;
-      font-weight: 700;
-      color: #58a6ff;
+      border-radius: 12px;
+      padding: 16px;
     }
 
     .kpi-card p.label {
-      font-size: 10px;
+      font-size: 11px;
       color: #8b949e;
-      margin-top: 4px;
+      margin-bottom: 6px;
+    }
+
+    .kpi-card p.value {
+      font-size: 26px;
+      font-weight: 700;
     }
 
     .kpi-card p.sub {
-      font-size: 10px;
-      color: #3fb950;
-      margin-top: 2px;
+      font-size: 11px;
+      margin-top: 4px;
     }
 
-    .section-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
+    .blue { color: #58a6ff; }
+    .green { color: #3fb950; }
+    .orange { color: #d29922; }
+    .purple { color: #a371f7; }
 
     .chart-card {
       background: #161b22;
       border: 1px solid #21262d;
       border-radius: 12px;
-      padding: 16px;
+      padding: 18px;
       margin-bottom: 16px;
     }
 
     .chart-title {
       font-size: 13px;
       font-weight: 600;
-      margin-bottom: 16px;
       color: #8b949e;
+      margin-bottom: 16px;
     }
 
     .bar-chart {
       display: flex;
       align-items: flex-end;
-      gap: 8px;
+      gap: 6px;
       height: 120px;
     }
 
@@ -117,29 +101,18 @@
     .bar {
       width: 100%;
       border-radius: 6px 6px 0 0;
-      background: #2563eb;
-      opacity: 0.85;
+      background: linear-gradient(180deg, #2563eb, #0ea5e9);
+      transition: height 0.5s ease;
     }
 
-    .bar-label {
-      font-size: 10px;
-      color: #8b949e;
-    }
-
-    .bar-value {
-      font-size: 10px;
-      color: #58a6ff;
-    }
-
-    .driver-perf {
-      margin-bottom: 12px;
-    }
+    .bar-label { font-size: 10px; color: #8b949e; }
+    .bar-value { font-size: 10px; color: #58a6ff; }
 
     .driver-row {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .driver-avatar {
@@ -155,9 +128,7 @@
       flex-shrink: 0;
     }
 
-    .driver-bar-wrap {
-      flex: 1;
-    }
+    .driver-bar-wrap { flex: 1; }
 
     .driver-name-row {
       display: flex;
@@ -179,197 +150,263 @@
       background: linear-gradient(90deg, #2563eb, #0ea5e9);
     }
 
-  body { padding-bottom: 80px; }
+    .status-breakdown {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
 
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #161b22;
-  border-top: 1px solid #21262d;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  z-index: 999;
-}
+    .status-item {
+      background: #0d1117;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
 
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  text-decoration: none;
-  color: #8b949e;
-  font-size: 10px;
-  padding: 4px 12px;
-  border-radius: 8px;
-}
+    .status-item p.num {
+      font-size: 20px;
+      font-weight: 700;
+    }
 
-.nav-item.active { color: #58a6ff; }
+    .status-item p.lbl {
+      font-size: 10px;
+      color: #8b949e;
+      margin-top: 4px;
+    }
 
-.nav-item span.icon { font-size: 20px; } </style>
+    .empty {
+      text-align: center;
+      color: #8b949e;
+      padding: 20px;
+      font-size: 13px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #161b22;
+      border-top: 1px solid #21262d;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 999;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: #8b949e;
+      font-size: 10px;
+      padding: 4px 12px;
+      border-radius: 8px;
+    }
+
+    .nav-item.active { color: #58a6ff; }
+    .nav-item span.icon { font-size: 20px; }
+  </style>
 </head>
 <body>
 
   <div class="topbar">
     <h1>📊 Analytics</h1>
-  </div>
-
-  <div class="period-row">
-    <button class="period-btn active">Week</button>
-    <button class="period-btn">Month</button>
-    <button class="period-btn">Year</button>
+    <span class="live-badge">🔴 Live</span>
   </div>
 
   <div class="kpi-grid">
     <div class="kpi-card">
-      <p class="num">354</p>
-      <p class="label">Total Deliveries</p>
-      <p class="sub">↑ 12%</p>
+      <p class="label">Total Orders</p>
+      <p class="value blue" id="totalOrders">—</p>
+      <p class="sub blue">All time</p>
     </div>
     <div class="kpi-card">
-      <p class="num">94%</p>
-      <p class="label">On Time Rate</p>
-      <p class="sub">↑ 2.1%</p>
+      <p class="label">Delivered</p>
+      <p class="value green" id="totalDelivered">—</p>
+      <p class="sub green">Completed</p>
     </div>
     <div class="kpi-card">
-      <p class="num">$19k</p>
-      <p class="label">Revenue</p>
-      <p class="sub">↑ 8%</p>
+      <p class="label">Total Drivers</p>
+      <p class="value orange" id="totalDrivers">—</p>
+      <p class="sub orange">In system</p>
+    </div>
+    <div class="kpi-card">
+      <p class="label">Success Rate</p>
+      <p class="value purple" id="successRate">—</p>
+      <p class="sub purple">Delivery rate</p>
     </div>
   </div>
 
+  <!-- Orders Status Breakdown -->
   <div class="chart-card">
-    <p class="chart-title">📈 Weekly Deliveries</p>
-    <div class="bar-chart">
-
-      <div class="bar-group">
-        <p class="bar-value">38</p>
-        <div class="bar" style="height: 50px"></div>
-        <p class="bar-label">Mon</p>
+    <p class="chart-title">📦 Orders Breakdown</p>
+    <div class="status-breakdown">
+      <div class="status-item">
+        <p class="num green" id="deliveredCount">0</p>
+        <p class="lbl">Delivered</p>
       </div>
-
-      <div class="bar-group">
-        <p class="bar-value">52</p>
-        <div class="bar" style="height: 70px"></div>
-        <p class="bar-label">Tue</p>
+      <div class="status-item">
+        <p class="num orange" id="transitCount">0</p>
+        <p class="lbl">In Transit</p>
       </div>
-
-      <div class="bar-group">
-        <p class="bar-value">45</p>
-        <div class="bar" style="height: 60px"></div>
-        <p class="bar-label">Wed</p>
+      <div class="status-item">
+        <p class="num purple" id="pendingCount">0</p>
+        <p class="lbl">Pending</p>
       </div>
-
-      <div class="bar-group">
-        <p class="bar-value">61</p>
-        <div class="bar" style="height: 82px"></div>
-        <p class="bar-label">Thu</p>
-      </div>
-
-      <div class="bar-group">
-        <p class="bar-value">74</p>
-        <div class="bar" style="height: 100px"></div>
-        <p class="bar-label">Fri</p>
-      </div>
-
-      <div class="bar-group">
-        <p class="bar-value">55</p>
-        <div class="bar" style="height: 74px"></div>
-        <p class="bar-label">Sat</p>
-      </div>
-
-      <div class="bar-group">
-        <p class="bar-value">29</p>
-        <div class="bar" style="height: 39px"></div>
-        <p class="bar-label">Sun</p>
-      </div>
-
     </div>
   </div>
 
+  <!-- Driver Performance -->
   <div class="chart-card">
     <p class="chart-title">🏆 Driver Performance</p>
-
-    <div class="driver-row">
-      <div class="driver-avatar">PP</div>
-      <div class="driver-bar-wrap">
-        <div class="driver-name-row">
-          <span>Priya Patel</span>
-          <span style="color:#3fb950">14 deliveries</span>
-        </div>
-        <div class="driver-bar-bg">
-          <div class="driver-bar-fill" style="width:94%"></div>
-        </div>
-      </div>
+    <div id="driverPerformance">
+      <div class="empty">⏳ Loading drivers...</div>
     </div>
-
-    <div class="driver-row">
-      <div class="driver-avatar">MJ</div>
-      <div class="driver-bar-wrap">
-        <div class="driver-name-row">
-          <span>Marcus Johnson</span>
-          <span style="color:#3fb950">12 deliveries</span>
-        </div>
-        <div class="driver-bar-bg">
-          <div class="driver-bar-fill" style="width:80%"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="driver-row">
-      <div class="driver-avatar">SC</div>
-      <div class="driver-bar-wrap">
-        <div class="driver-name-row">
-          <span>Sarah Chen</span>
-          <span style="color:#3fb950">9 deliveries</span>
-        </div>
-        <div class="driver-bar-bg">
-          <div class="driver-bar-fill" style="width:60%"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="driver-row">
-      <div class="driver-avatar">DR</div>
-      <div class="driver-bar-wrap">
-        <div class="driver-name-row">
-          <span>Diego Reyes</span>
-          <span style="color:#d29922">7 deliveries</span>
-        </div>
-        <div class="driver-bar-bg">
-          <div class="driver-bar-fill" style="width:46%"></div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-<nav class="bottom-nav">
+  <!-- Inventory Health -->
+  <div class="chart-card">
+    <p class="chart-title">🏭 Inventory Health</p>
+    <div class="status-breakdown">
+      <div class="status-item">
+        <p class="num green" id="goodStock">0</p>
+        <p class="lbl">Good Stock</p>
+      </div>
+      <div class="status-item">
+        <p class="num orange" id="lowStock">0</p>
+        <p class="lbl">Low Stock</p>
+      </div>
+      <div class="status-item">
+        <p class="num red" id="criticalStock">0</p>
+        <p class="lbl">Critical</p>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
     <a href="dashboard.html" class="nav-item">
-      <span class="icon">⊞</span>
-      <span>Dashboard</span>
+      <span class="icon">⊞</span><span>Dashboard</span>
     </a>
     <a href="orders.html" class="nav-item">
-      <span class="icon">📦</span>
-      <span>Orders</span>
+      <span class="icon">📦</span><span>Orders</span>
     </a>
     <a href="fleet.html" class="nav-item">
-      <span class="icon">🚚</span>
-      <span>Fleet</span>
+      <span class="icon">🚚</span><span>Fleet</span>
     </a>
     <a href="inventory.html" class="nav-item">
-      <span class="icon">🏭</span>
-      <span>Inventory</span>
+      <span class="icon">🏭</span><span>Inventory</span>
     </a>
     <a href="analytics.html" class="nav-item active">
-      <span class="icon">📊</span>
-      <span>Analytics</span>
+      <span class="icon">📊</span><span>Analytics</span>
     </a>
     <a href="settings.html" class="nav-item">
-      <span class="icon">⚙️</span>
-      <span>Settings</span>
+      <span class="icon">⚙️</span><span>Settings</span>
     </a>
-</nav> </body>
+  </nav>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA49Ty_swoots2VvdIZFfoMd1Rn-nFQNtI",
+      authDomain: "deliveros-ddb37.firebaseapp.com",
+      projectId: "deliveros-ddb37",
+      storageBucket: "deliveros-ddb37.firebasestorage.app",
+      messagingSenderId: "47557698801",
+      appId: "1:47557698801:web:8963985a5327bba9e8b550"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    function getInitials(name) {
+      return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+    }
+
+    function getStockStatus(stock, capacity) {
+      let pct = (stock / capacity) * 100;
+      if (pct > 40) return "good";
+      if (pct > 15) return "low";
+      return "critical";
+    }
+
+    // Listen to orders
+    onSnapshot(collection(db, "orders"), (snapshot) => {
+      let orders = [];
+      snapshot.forEach(d => orders.push(d.data()));
+
+      let total = orders.length;
+      let delivered = orders.filter(o => o.status === "delivered").length;
+      let transit = orders.filter(o => o.status === "transit").length;
+      let pending = orders.filter(o => o.status === "pending").length;
+      let rate = total > 0 ? Math.round((delivered / total) * 100) : 0;
+
+      document.getElementById("totalOrders").innerText = total;
+      document.getElementById("totalDelivered").innerText = delivered;
+      document.getElementById("successRate").innerText = rate + "%";
+      document.getElementById("deliveredCount").innerText = delivered;
+      document.getElementById("transitCount").innerText = transit;
+      document.getElementById("pendingCount").innerText = pending;
+    });
+
+    // Listen to drivers
+    onSnapshot(collection(db, "drivers"), (snapshot) => {
+      let drivers = [];
+      snapshot.forEach(d => drivers.push({ docId: d.id, ...d.data() }));
+
+      document.getElementById("totalDrivers").innerText = drivers.length;
+
+      let perf = document.getElementById("driverPerformance");
+
+      if (drivers.length === 0) {
+        perf.innerHTML = `<div class="empty">No drivers yet!</div>`;
+        return;
+      }
+
+      let maxDeliveries = Math.max(...drivers.map(d => d.deliveries || 0), 1);
+      perf.innerHTML = "";
+
+      drivers.forEach(driver => {
+        let pct = Math.round(((driver.deliveries || 0) / maxDeliveries) * 100);
+        perf.innerHTML += `
+          <div class="driver-row">
+            <div class="driver-avatar">${getInitials(driver.name)}</div>
+            <div class="driver-bar-wrap">
+              <div class="driver-name-row">
+                <span>${driver.name}</span>
+                <span style="color:#3fb950">${driver.deliveries || 0} deliveries</span>
+              </div>
+              <div class="driver-bar-bg">
+                <div class="driver-bar-fill" style="width:${pct}%"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    });
+
+    // Listen to inventory
+    onSnapshot(collection(db, "inventory"), (snapshot) => {
+      let items = [];
+      snapshot.forEach(d => items.push(d.data()));
+
+      document.getElementById("goodStock").innerText =
+        items.filter(i => getStockStatus(i.stock, i.capacity) === "good").length;
+      document.getElementById("lowStock").innerText =
+        items.filter(i => getStockStatus(i.stock, i.capacity) === "low").length;
+      document.getElementById("criticalStock").innerText =
+        items.filter(i => getStockStatus(i.stock, i.capacity) === "critical").length;
+    });
+
+  </script>
+
+</body>
   </html>
