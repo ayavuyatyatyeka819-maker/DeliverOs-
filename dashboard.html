@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>DeliverOS - Firebase</title>
+  <title>DeliverOS - Dashboard</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -10,6 +10,7 @@
       color: #e6edf3;
       font-family: Arial, sans-serif;
       padding: 20px;
+      padding-bottom: 80px;
     }
 
     .topbar {
@@ -21,16 +22,13 @@
 
     .topbar h1 { font-size: 20px; }
 
-    .badge {
+    .live-badge {
+      background: #1a3a2a;
+      color: #3fb950;
       font-size: 11px;
       padding: 4px 10px;
       border-radius: 20px;
       font-weight: 600;
-    }
-
-    .live {
-      background: #1a3a2a;
-      color: #3fb950;
     }
 
     .stats {
@@ -56,6 +54,11 @@
     .card p.value {
       font-size: 24px;
       font-weight: 700;
+    }
+
+    .card p.change {
+      font-size: 11px;
+      margin-top: 4px;
     }
 
     .blue { color: #58a6ff; }
@@ -106,7 +109,7 @@
       margin-top: 2px;
     }
 
-    .status-badge {
+    .badge {
       font-size: 10px;
       padding: 4px 10px;
       border-radius: 20px;
@@ -183,41 +186,73 @@
       padding: 40px;
       font-size: 14px;
     }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #161b22;
+      border-top: 1px solid #21262d;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 999;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: #8b949e;
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+
+    .nav-item.active { color: #58a6ff; }
+    .nav-item span.icon { font-size: 20px; }
   </style>
 </head>
 <body>
 
   <div class="topbar">
     <h1>🚀 DeliverOS</h1>
-    <span class="badge live">🔴 Live</span>
+    <span class="live-badge">🔴 Live</span>
   </div>
 
   <div class="stats">
     <div class="card">
       <p class="label">Total Orders</p>
       <p class="value blue" id="totalOrders">—</p>
+      <p class="change blue">Updated live</p>
     </div>
     <div class="card">
       <p class="label">Delivered</p>
       <p class="value green" id="totalDelivered">—</p>
+      <p class="change green">Completed</p>
     </div>
     <div class="card">
       <p class="label">In Transit</p>
       <p class="value orange" id="totalTransit">—</p>
+      <p class="change orange">On the way</p>
     </div>
     <div class="card">
       <p class="label">Pending</p>
       <p class="value purple" id="totalPending">—</p>
+      <p class="change purple">Needs driver</p>
     </div>
   </div>
 
   <div class="section-header">
-    <p class="section-title">Live Orders from Firebase</p>
+    <p class="section-title">Live Orders</p>
     <button class="btn-add" onclick="openModal()">+ New Order</button>
   </div>
 
   <div id="orderList">
-    <div class="loading">⏳ Loading orders from Firebase...</div>
+    <div class="loading">⏳ Loading orders...</div>
   </div>
 
   <div class="modal-bg" id="modal">
@@ -237,19 +272,46 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item active">
+      <span class="icon">⊞</span>
+      <span>Dashboard</span>
+    </a>
+    <a href="orders.html" class="nav-item">
+      <span class="icon">📦</span>
+      <span>Orders</span>
+    </a>
+    <a href="fleet.html" class="nav-item">
+      <span class="icon">🚚</span>
+      <span>Fleet</span>
+    </a>
+    <a href="inventory.html" class="nav-item">
+      <span class="icon">🏭</span>
+      <span>Inventory</span>
+    </a>
+    <a href="analytics.html" class="nav-item">
+      <span class="icon">📊</span>
+      <span>Analytics</span>
+    </a>
+    <a href="settings.html" class="nav-item">
+      <span class="icon">⚙️</span>
+      <span>Settings</span>
+    </a>
+  </nav>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { 
-      getFirestore, 
-      collection, 
-      addDoc, 
-      onSnapshot,
-      query,
-      orderBy
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      onSnapshot
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    // Your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyA49Ty_swoots2VvdIZFfoMd1Rn-nFQNtI",
       authDomain: "deliveros-ddb37.firebaseapp.com",
@@ -259,9 +321,16 @@
       appId: "1:47557698801:web:8963985a5327bba9e8b550"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // Redirect to login if not logged in
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+      }
+    });
 
     let statusLabel = {
       transit: "In Transit",
@@ -269,32 +338,25 @@
       pending: "Pending"
     };
 
-    // Listen to orders in REAL TIME
-    const ordersRef = collection(db, "orders");
-
-    onSnapshot(ordersRef, (snapshot) => {
+    onSnapshot(collection(db, "orders"), (snapshot) => {
       let orders = [];
       snapshot.forEach((doc) => {
         orders.push({ docId: doc.id, ...doc.data() });
       });
 
-      // Update stats
       document.getElementById("totalOrders").innerText = orders.length;
-      document.getElementById("totalDelivered").innerText = 
+      document.getElementById("totalDelivered").innerText =
         orders.filter(o => o.status === "delivered").length;
-      document.getElementById("totalTransit").innerText = 
+      document.getElementById("totalTransit").innerText =
         orders.filter(o => o.status === "transit").length;
-      document.getElementById("totalPending").innerText = 
+      document.getElementById("totalPending").innerText =
         orders.filter(o => o.status === "pending").length;
 
-      // Show orders
       let list = document.getElementById("orderList");
       list.innerHTML = "";
 
       if (orders.length === 0) {
-        list.innerHTML = `
-          <div class="loading">No orders yet — add one!</div>
-        `;
+        list.innerHTML = `<div class="loading">No orders yet!</div>`;
         return;
       }
 
@@ -302,45 +364,17 @@
         list.innerHTML += `
           <div class="order-card">
             <div>
-              <p class="order-id">${order.id || "No ID"}</p>
+              <p class="order-id">${order.id}</p>
               <p class="order-customer">${order.customer}</p>
               <p class="order-customer">👤 ${order.driver}</p>
             </div>
-            <span class="status-badge ${order.status}">
-              ${statusLabel[order.status] || order.status}
+            <span class="badge ${order.status}">
+              ${statusLabel[order.status]}
             </span>
           </div>
         `;
       });
     });
-
-    // Add new order to Firebase
-    window.addOrder = async function() {
-      let customer = document.getElementById("customerName").value.trim();
-      let driver = document.getElementById("driverName").value.trim();
-      let status = document.getElementById("orderStatus").value;
-
-      if (customer === "") {
-        alert("Please enter a customer name!");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "orders"), {
-          id: "#ORD-" + Date.now(),
-          customer: customer,
-          driver: driver || "Unassigned",
-          status: status,
-        });
-
-        document.getElementById("customerName").value = "";
-        document.getElementById("driverName").value = "";
-        closeModal();
-
-      } catch (error) {
-        alert("Error adding order: " + error.message);
-      }
-    }
 
     window.openModal = function() {
       document.getElementById("modal").className = "modal-bg open";
@@ -350,6 +384,27 @@
       document.getElementById("modal").className = "modal-bg";
     }
 
+    window.addOrder = async function() {
+      let customer = document.getElementById("customerName").value.trim();
+      let driver = document.getElementById("driverName").value.trim();
+      let status = document.getElementById("orderStatus").value;
+
+      if (!customer) {
+        alert("Please enter a customer name!");
+        return;
+      }
+
+      await addDoc(collection(db, "orders"), {
+        id: "#ORD-" + Date.now(),
+        customer: customer,
+        driver: driver || "Unassigned",
+        status: status,
+      });
+
+      document.getElementById("customerName").value = "";
+      document.getElementById("driverName").value = "";
+      closeModal();
+    }
   </script>
 
 </body>
