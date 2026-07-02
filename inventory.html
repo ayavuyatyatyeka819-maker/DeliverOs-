@@ -2,6 +2,8 @@
 <html>
 <head>
   <title>DeliverOS - Inventory</title>
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2563eb">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -284,5 +286,12 @@
       <span class="icon">⚙️</span>
       <span>Settings</span>
     </a>
-</nav> </body>
+</nav> <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(function() {
+        console.log('DeliverOS SW registered');
+      });
+  }
+</script> </body>
 </html>
