@@ -1,6 +1,5 @@
-const CACHE_NAME = "deliveros-v1";
+const CACHE_NAME = "deliveros-v2";
 const urlsToCache = [
-  "/DeliverOs-/",
   "/DeliverOs-/index.html",
   "/DeliverOs-/dashboard.html",
   "/DeliverOs-/orders.html",
@@ -8,10 +7,12 @@ const urlsToCache = [
   "/DeliverOs-/inventory.html",
   "/DeliverOs-/analytics.html",
   "/DeliverOs-/settings.html",
-  "/DeliverOs-/map.html"
+  "/DeliverOs-/map.html",
+  "/DeliverOs-/manifest.json"
 ];
 
 self.addEventListener("install", function(event) {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
       return cache.addAll(urlsToCache);
@@ -19,11 +20,21 @@ self.addEventListener("install", function(event) {
   );
 });
 
+self.addEventListener("activate", function(event) {
+  event.waitUntil(
+    caches.keys().then(function(keys) {
+      return Promise.all(
+        keys.filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      );
+    })
+  );
+});
+
 self.addEventListener("fetch", function(event) {
   event.respondWith(
     caches.match(event.request).then(function(response) {
-      if (response) return response;
-      return fetch(event.request);
+      return response || fetch(event.request);
     })
   );
 });
